@@ -1,20 +1,90 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Yohei Okubo's page</title>
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class = "main-text">
-  <h3>
-  hi,my name is Yohei Okubo, a poor software-developer in Tokyo.<br>
+  <div id="result"></div>
+  <div id="stock"></div>
+  <button type="submit" id="show_result" onclick="update();">SHOW RESULT</button>
+  <button type="submit" id="clear" onclick="clearDom();">CLEAR</button>
+  <script>
+  var RESULT = null;
+  var STOCK = initStock();
+  update();
 
-  I like Ruby,Swift and I'm interested in machine learning.<br>
-  
-  Computation is awesome.<br>
-  
-  thx<br>
-  </h3>
-  </div>
+  function clearDom() {
+    STOCK = initStock();
+    update();
+  }
+  function update() {
+    showResult();
+    $('#stock').html(Object.keys(STOCK).map(buildDom).join(''));
+  }
+
+  function buildDom(key) {
+    var html = "";
+    if (key % 10 == 0) {
+      html += "<br>";
+    }
+    if (STOCK[key]) {
+      html += `<span class="num_box" value="show" style="width: 10px; color: red;}">${key},</span>`;
+    } else {
+      html += `<span class="num_box" value="hidden" style="width: 10px; color: gray;}">${key},</span>`;
+    }
+    return html;
+  }
+
+  function initStock() {
+    var map = {};
+    for(var i = 1; i <= 100; i++) {
+      map[i] = false;
+    }
+    return map;
+  };
+
+  function getRandom() {
+    return Math.floor((Math.random() * 100) + 1);
+  }
+
+  function turn() {
+    var current = getRandom();
+    while (STOCK[current]) {
+      current = getRandom();
+    }
+    STOCK[current] = true;
+    return current;
+  }
+
+  function isEnd() {
+    var isEnd = null;
+    for(var i = 1; i <= 100; i++) {
+      if (!STOCK[i]) { return false };
+    }
+    return true;
+  }
+
+  function showResult() {
+    if (isEnd()) { alert("全て埋まっています"); }
+    $('#result').text(turn());
+  }
+  </script>
+
+  <style>
+  <!--
+  #result {
+    font-size: 120px;
+    color: red;
+    background-color: black;
+    text-align: center;
+    width: 400px;
+    height: 120px;
+    margin: 0 auto;
+  }
+  #stock {
+    width: 500px;
+    height: 200px;
+  }
+  -->
+  </style>
 </body>
-</html>
