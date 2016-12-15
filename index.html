@@ -65,8 +65,12 @@
   }
 
   function showResult() {
-    if (isEnd()) { alert("全て埋まっています"); }
-    $('#result').text(turn());
+    if (isEnd()) {
+      alert("全て埋まっています");
+      clearDom();
+    } else {
+      $('#result').text(turn());
+    }
   }
   </script>
 
